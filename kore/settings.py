@@ -157,7 +157,15 @@ CORS_ORIGIN_ALLOW_ALL = True
 
 # local_settings.py can be used to override environment-specific settings
 # like database and email that differ between development and production.
-try:
-    from local_settings import *
-except ImportError:
-    pass
+# local_settings.py can be used to override environment-specific settings
+# like database and email that differ between development and production.
+local_settings_path = os.path.join(BASE_DIR, "local_settings.py")
+if os.path.exists(local_settings_path):
+    import sys
+    import types
+    module_name = "%s.local_settings" % ROOT_URLCONF.split('.')[0]
+    module = types.ModuleType(module_name)
+    module.__file__ = local_settings_path
+    sys.modules[module_name] = module
+    with open(local_settings_path, "rb") as f:
+        exec(f.read())
