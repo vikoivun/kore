@@ -1,0 +1,57 @@
+# Not-generic Django settings
+###################################################################
+
+# Type of the deployment. Valid values are:
+# production, testing and development
+#
+# SITE_TYPE is a common setting across projects
+# by Helsinki AOK. For KORE it only defines background
+# colors for admin interface. Still it must be defined
+# for the project to start.
+SITE_TYPE = 'production'
+
+# RAVEN_CONFIG is the address of Sentry (https://docs.sentry.io/)
+# where the inevitable expections will be sent. Set to None, if
+# this does not exist.
+RAVEN_CONFIG = {
+    'dsn': 'http://raven:identifier@my.sentry.hel.ninja/raven_id',
+}
+
+# Generic Django settings. See Django documentation for version 1.11
+# (https://docs.djangoproject.com/en/1.11/)
+###################################################################
+
+# Upon deploying to a server you will want to change these
+ALLOWED_HOSTS = ['localhost', 'kore-api.my-own.domain']
+
+# This sets Django to use a local Postgres database named 'kore'
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',
+        'NAME': 'kore',
+        'USER': 'kore',
+        'CONN_MAX_AGE': 600,
+        'ATOMIC_REQUESTS': False,
+    }
+}
+
+# Secret key should be randomly generated
+SECRET_KEY = 'generate_your_own_random_secret_key_here'
+
+DEBUG = False
+
+LOGIN_REDIRECT_URL = 'https://localhost/kore/admin/'
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+# Useful when you have a reverse proxy in front of your WSGI-server
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+
+CSRF_COOKIE_NAME = 'kore-csrftoken'
+SESSION_COOKIE_NAME = 'kore-sessionid'
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_PATH = '/'
+
+# These need to be set based on where your installation is
+STATIC_ROOT = '/home/kore/static'
+MEDIA_ROOT = '/home/kore/media'
+STATIC_URL = '/kore/static/'
+MEDIA_URL = '/kore/media/'
